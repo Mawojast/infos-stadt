@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="210mm" height="297mm" version="1.1" viewBox="0 0 744.09448819 1052.3622047" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <filter id="h" x="-.0069024" y="-.0053063" width="1.0138" height="1.0106" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.97617603"/>
+  </filter>
+  <filter id="i" x="-.0070414" y="-.005227" width="1.0141" height="1.0105" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.86291668"/>
+  </filter>
+  <filter id="f" x="-.23787" y="-.29043" width="1.4757" height="1.5809" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="20.432647"/>
+  </filter>
+  <filter id="g" x="-.262" y="-2.7749" width="1.524" height="6.5497" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="47.992925"/>
+  </filter>
+ </defs>
+ <rect x="-131.82" y="-42.311" width="838.57" height="838.57" ry="419.29" fill="#1a1a1a" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".023891" stroke-width="1.4255"/>
+ <rect x="115.09" y="561.8" width="439.62" height="41.509" ry="20.755" fill="#d5d5d5" fill-opacity=".31156" filter="url(#g)" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".023891" stroke-width="1.471"/>
+ <g transform="matrix(1.3707 0 0 1.4588 -114.39 .80337)">
+  <ellipse id="j" cx="165.69" cy="207.99" rx="76.517" ry="71.892" fill="#fc0" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1" stroke-opacity=".023891" stroke-width=".17331"/>
+  <use transform="matrix(1.4286 0 0 1.4285 -64.276 -90.844)" width="100%" height="100%" fill="#ffcc00" xlink:href="#j"/>
+  <ellipse transform="matrix(.43775 0 0 .41129 35.414 60.906)" cx="257.2" cy="351.44" rx="147.06" ry="198.11" fill="#fd5" filter="url(#i)" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".023891" stroke-width="1.8561"/>
+  <ellipse transform="matrix(.43775 0 0 .41129 35.414 60.906)" cx="315.12" cy="354.39" rx="169.71" ry="220.76" fill="#fc0" filter="url(#h)" stroke-width="0"/>
+ </g>
+ <rect transform="matrix(1.6654 0 0 1.9636 -81.314 -298.77)" x="23.56" y="229.71" width="206.15" height="168.85" ry="84.425" fill="#fc0" fill-opacity=".31156" filter="url(#f)" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".023891" stroke-width="1.471"/>
+ <rect x="117.13" y="218.03" width="261.17" height="191.51" ry="95.756" fill="#b3b3b3" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1" stroke-opacity=".023891" stroke-width=".4146"/>
+ <rect x="45.709" y="320.93" width="406.76" height="242.86" ry="121.43" fill="#b3b3b3" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1" stroke-opacity=".023891" stroke-width=".49039"/>
+ <rect x="169.42" y="340.96" width="453.41" height="222.8" ry="111.4" fill="#b3b3b3" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1" stroke-opacity=".023891" stroke-width=".55441"/>
+ <rect x="271.14" y="261" width="219.73" height="142.72" ry="71.358" fill="#b3b3b3" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1" stroke-opacity=".023891" stroke-width=".63257"/>
+</svg>
