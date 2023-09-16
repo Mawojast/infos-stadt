@@ -30,7 +30,7 @@ final class ArticleManager{
     public function substituteArticleImage(&$article) {
 
         if(empty($article->imagePath)){
-            $pathToImage = $this->getRandomFilePath($this->getFilePaths('images/article_substitute/'));
+            $pathToImage = $this->getRandomFilePath($this->getPublicFilePaths('images/article_substitute/'));
             if(!in_array($pathToImage, $this->substitutedArticleImage)){
                 $article->imagePath = $pathToImage;
                 $this->substitutedArticleImage[] = $pathToImage;

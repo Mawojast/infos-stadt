@@ -1,0 +1,176 @@
+*{
+    font-family: "Trebuchet MS", Times, serif;
+    color: #0b0d0f;
+}
+p{
+    font-size: 1rem;
+}
+
+.navigation{
+   background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding-bottom: 0.2rem;
+    font-size: 1.2rem;
+
+}
+.footer{
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    font-size: 1rem;
+}
+.weather-info-box{
+    background-color: rgba(194, 155, 155, 0.5);
+    font-weight: 700;
+
+    backdrop-filter: blur(2px); background-color: rgba(255, 255, 255, 0);
+    border-radius: 5px;
+    box-shadow: 0px 35px 68px 0px rgba(145, 192, 255, 0.5), inset 0px -6px 10px 0px rgba(145, 192, 255, 0.6), inset 0px 5px 22px 0px rgba(145, 192, 255, 0.6);
+}
+.time-info-box{
+    box-shadow: inset 5px 5px 5px rgba(0,0,0,0.2),
+        inset -5px -5px 15px rgba(255, 255, 255, 0.1),
+        5px 5px 15px rgba(0,0,0,0.3),
+        -5px -5px 15px rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+}
+li{
+    list-style-type: none;
+}
+a{
+    text-decoration: none;
+    color: #000;
+}
+.main-content {
+
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+.news-content {
+    backdrop-filter: blur(5px); background-color: rgba(255, 255, 255, 0); border-radius: 5px; box-shadow: 0px 35px 68px 0px rgba(145, 192, 255, 0.5), inset 0px -6px 10px 0px rgba(145, 192, 255, 0.6), inset 0px 5px 16px 0px rgba(145, 192, 255, 0.6);
+
+}
+.news-article{
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+.news-article:hover{
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.article-content{
+    backdrop-filter: blur(2px); background-color: rgba(255, 255, 255, 0); box-shadow: 0px 35px 68px 0px rgba(145, 192, 255, 0.5), inset 0px -6px 10px 0px rgba(145, 192, 255, 0.6), inset 0px 5px 22px 0px rgba(145, 192, 255, 0.6);
+}
+.article-image{
+    height: 13rem;
+}
+.article-info{
+    font-size: 1rem;
+}
+.article-description{
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.letter{
+    font-size: 1.2rem;
+}
+.letterLabel{
+    background-color: #e8e8ec;
+}
+
+.inputGroup {
+    position: relative;
+}
+
+
+
+.inputGroup input {
+font-size: 100%;
+padding: 0.8em;
+outline: none;
+border: none;
+background-color: #e8e8e8;
+border-radius: 0;
+width: 100%;
+}
+
+
+.navigation-link{
+font-weight: 600;
+}
+
+.navigation-link:hover{
+background-color: rgba(66, 62, 62, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+.search-form-button{
+background-color: #0b0d0f;
+border-radius: 0;
+}
+.search-form-button:hover{
+background-color: #0b0d0f;
+}
+.active-link{
+background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+/*box-shadow: inset 5px 5px 5px rgba(0,0,0,0.2),
+        inset -5px -5px 15px rgba(255, 255, 255, 0.1),
+        5px 5px 15px rgba(0,0,0,0.3),
+        -5px -5px 15px rgba(255, 255, 255, 0.1);*/
+
+}
+
+.inputGroup label {
+font-size: 100%;
+position: absolute;
+top: 25%;
+
+
+pointer-events: none;
+transition: all 0.3s ease;
+color: rgb(100, 100, 100);
+width: 10%;
+}
+
+.inputGroup :is(input:focus, input:valid)~label {
+transform: translateY(-50%) scale(.9);
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+color:rgb(100, 100, 100)
+}
+
+
+#scroll-to-top {
+position: fixed;
+bottom: 20px;
+right: 20px;
+width: 50px;
+height: 50px;
+background-color: #0b0d0f;
+text-align: center;
+color: #e8e8e8;
+border-radius: 0;
+display: none;
+z-index: 9999;
+}
+.activeLetterList{
+text-decoration-line: underline;
+text-decoration-thickness: 30%;
+text-decoration-color: #0b0d0f;
+}
+
+#scroll-to-top i {
+padding-top: 17px;
+font-size: 20px;
+}

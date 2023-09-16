@@ -22,7 +22,8 @@ class HomeController extends Controller
     public $substitutedArticleImage = [];
 
     public function home(){
-        $backgroundImagePaths = $this->getFilePaths('images/home/');
+
+        $backgroundImagePaths = $this->getPublicFilePaths('images/home/');
         $backgroundImagePath = $this->getRandomFilePath($backgroundImagePaths);
         return view('home', compact('backgroundImagePath'));
     }
@@ -134,7 +135,7 @@ class HomeController extends Controller
         return view('list_letter', compact('cities', 'letter'));
     }
 
-    public function privacy_policy(){
+    public function privacyPolicy(){
 
         return view('privacy_policy');
     }
@@ -217,14 +218,13 @@ class HomeController extends Controller
                     $article['description'],
                     $article['published_at'],
                     $article['url'],
-                    $article['author'],
+                    $article['source'],
                     $article['image'])
                 );
             }
 
             $ArticleManager->removeDoubleArticles();
             $ArticleManager->setEmptyArticleImages();
-
             return $ArticleManager->articles;
 
         }catch(Exception $e){
@@ -401,9 +401,9 @@ class HomeController extends Controller
         }
 
         if( $is_day){
-            $filePath = $this->getRandomFilePath($this->getFilePaths($folderPath.'day/'));
+            $filePath = $this->getRandomFilePath($this->getPublicFilePaths($folderPath.'day/'));
         }else{
-            $filePath = $this->getRandomFilePath($this->getFilePaths($folderPath.'night/'));
+            $filePath = $this->getRandomFilePath($this->getPublicFilePaths($folderPath.'night/'));
         }
 
         return $filePath;

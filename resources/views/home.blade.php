@@ -3,6 +3,7 @@
 @endsection
 
 @section('background')
+
 style="background-image: url({{asset($backgroundImagePath)}}); background-repeat: no-repeat;
 background-attachment: fixed;
 background-size: cover;"

@@ -44,7 +44,7 @@
                 <img src="@if (filter_var($article->imagePath, FILTER_VALIDATE_URL)) {{$article->imagePath}} @else {{asset($article->imagePath)}} @endif" class="card-img-top article-image" alt="...">
             </div>
             <div class="col-md">
-                <h4 class="card-title pt-2">{{$article->title}}</h4>
+                <h3 class="card-title pt-2">{{$article->title}}</h3>
                 <p class="card-text pt-2 article-description">{{$article->description}}</p>
                 <p class="card-text article-info"><small>{{date('d.m.Y',strtotime($article->publishedAt))}} @if (!empty($article->sourceName)) - {{$article->sourceName}} @endif</small></p>
             </div>
@@ -62,7 +62,7 @@ background-size: cover;"
 @endsection
 
 @section('title')
-    {{$weather['name']}} - {{round($weather['main']['temp'])}}&#8451; {!!$titleIcons[0]!!} {!!$titleIcons[1] ?? ''!!}
+    {{$weather['name']}} - {{round($weather['main']['temp'])}}&#8451; {!!$titleIcons[0] ?? '' !!} {!!$titleIcons[1] ?? ''!!}
 @endsection
 
 @section('description')

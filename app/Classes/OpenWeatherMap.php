@@ -5,7 +5,7 @@ use App\Classes\Api;
 class OpenWeatherMap implements Api{
 
     private array $queries = [];
-    private array $result = [];
+    private array|null $result = [];
 
     public function setKey(string $key): void{
 

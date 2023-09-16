@@ -3,15 +3,16 @@ namespace App\Traits;
 
 trait DirectoryHelper{
 
-    public function getFilePaths(string $dir) {
+    public function getPublicFilePaths(string $dir, string $addPath = ''): array {
 
         $filepaths = array();
+        $absolutePath = public_path($dir);
 
-        if (is_dir($dir) && $handle = opendir($dir)) {
+        if (is_dir($absolutePath) && $handle = opendir($absolutePath)) {
 
             while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != ".." && !is_dir($dir.$file)) {
-                    $filepaths[] = $dir.$file;
+                if ($file != "." && $file != ".." && !is_dir($absolutePath.$file)) {
+                    $filepaths[] = $addPath.$dir.$file;
                 }
             }
             closedir($handle);

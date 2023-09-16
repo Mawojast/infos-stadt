@@ -1,3 +1,3 @@
 User-agent: *
-Disallow: /imprint.blade.php
-Disallow: /privacy_policy.blade.php
+Disallow: /impressum
+Disallow: /datenschutz
