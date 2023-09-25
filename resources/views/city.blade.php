@@ -6,8 +6,8 @@
 
         <div class="d-flex flex-row justify-content-between">
             <div>
-                <h2 class="d-inline-flex text-justify">{{$weather['name']}}</h2>
-                <img src="{{asset($weatherIconPath)}}" class="d-inline-flex" style="height: 50px;" alt="weather-icon-{{$weather['weather'][0]['description']}}">
+                <h2 class="d-inline-flex text-justify">{{$weather->city}}</h2>
+                <img src="{{asset($weatherIconPath)}}" class="d-inline-flex" style="height: 50px;" alt="weather-icon-{{$weather->description}}">
             </div>
             <div>
                 <p class="font-weight-bold text-right p-1 time-info-box"><strong>{{$dateTime}}</strong></p>
@@ -17,13 +17,13 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="d-inline-block">
-                    <p class="weather-info-box p-1">{{round($weather['main']['temp'])}}&#8451;</p>
+                    <p class="weather-info-box p-1">{{round($weather->temperature)}}&#8451;</p>
                 </div>
                 <div class="d-inline-block">
-                    <p class="weather-info-box p-1">{{$weather['weather'][0]['description']}}</p>
+                    <p class="weather-info-box p-1">{{$weather->description}}</p>
                 </div>
                 <div class="d-inline-block">
-                    <p class="weather-info-box p-1">{{$weather['wind']['speed']}} km/h Windgeschwindigkeit</p>
+                    <p class="weather-info-box p-1">{{$weather->windSpeed}} km/h Windgeschwindigkeit</p>
                 </div>
             </div>
         </div>
@@ -62,13 +62,13 @@ background-size: cover;"
 @endsection
 
 @section('title')
-    {{$weather['name']}} - {{round($weather['main']['temp'])}}&#8451; {!!$titleIcons[0] ?? '' !!} {!!$titleIcons[1] ?? ''!!}
+    {{$weather->city}} - {{round($weather->temperature)}}&#8451; {!!$titleIcons[0] ?? '' !!} {!!$titleIcons[1] ?? ''!!}
 @endsection
 
 @section('description')
-Für die Stadt {{$weather['name']}} die Einwohnerzahl, aktuelle Wetterdaten oder auch Nachrichten gezeigt.
+Für die Stadt {{$weather->city}} die Einwohnerzahl, aktuelle Wetterdaten oder auch Nachrichten gezeigt.
 @endsection
 
 @section('keywords')
-Wetter, Temperatur, Windgeschwindigkeit, Nachrichten, Einwohnerzahl, Bekanntheiten, {{$weather['name']}}
+Wetter, Temperatur, Windgeschwindigkeit, Nachrichten, Einwohnerzahl, Bekanntheiten, {{$weather->city}}
 @endsection

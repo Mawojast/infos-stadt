@@ -14,95 +14,24 @@
 </head>
 <body @yield('background') style="object-fit: contain;">
         @include('header')
+
         @yield('main')
         @include('footer')
-        <script
-  src="https://code.jquery.com/jquery-3.7.1.js"
-  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-  crossorigin="anonymous"></script>
+        <div class="d-flex justify-content-center m-5 spinner-box">
+            <div class="spinner-grow" style="width: 3rem; height: 3rem; display: none; background-color: #0b0d0f;" role="status">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <script src="{{asset('/js/app.js')}}"></script>
+        <script type="module" src="{{asset('/js/app.js')}}"></script>
 
 
 
-        <script>
+        <script type="module">
 
-               // Überprüfen, ob eine vertikale Scrollbar vorhanden ist
-   function hasVerticalScrollbar() {
-    // Gesamthöhe des Dokuments (einschließlich nicht sichtbarer Bereiche)
-    const documentHeight = Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.offsetHeight,
-      document.body.clientHeight,
-      document.documentElement.clientHeight
-    );
 
-    // Höhe des sichtbaren Bereichs (Viewport)
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
 
-    // Überprüfen, ob die Gesamthöhe des Dokuments größer als die Höhe des sichtbaren Bereichs ist
-    return documentHeight > viewportHeight;
-  }
-
-  // Beispielaufruf
-  if (!hasVerticalScrollbar()) {
-      $('div.footer').addClass('fixed-bottom');
-
-  }
-
-  /////////////////////////////////////////////////////////////////////
-
-  $(document).ready(function() {
-      // Show or hide the button based on scrolling
-        $(window).scroll(function() {
-        if ($(this).scrollTop() > 100) {
-          $('#scroll-to-top').fadeIn();
-        } else {
-          $('#scroll-to-top').fadeOut();
-        }
-      });
-
-      // Scroll to top on button click
-      $('#scroll-to-top').click(function() {
-        $('html, body').animate({scrollTop : 0}, 10);
-        return false;
-      });
-    });
-
-  ///////////////////////////////////////////////////////////////////////////
-
-//   $("#search-city-form").on("submit", function(event) {
-
-//       //event.preventDefault();
-
-//       // Create the element
-//       let element = document.createElement("div");
-
-//       // Set the element's style
-//       element.style.width = "100px";
-//       element.style.height = "100px";
-//       element.style.backgroundColor = "#ff0000;";
-//       element.style.position = "absolute";
-//       element.style.top = "50%";
-//       element.style.left = "50%";
-//       element.style.transform = "translate(-50%, -50%) rotate(45deg)";
-
-//       // Append the element to the document
-//       document.body.appendChild(element);
-//   })
-
-$("#city-input").on("keyup", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault(); // Verhindert das Standardverhalten des Formulars (Seitenneuladen)
-
-        // Fügen Sie hier Ihren Code zum Ausführen des Query-Codes ein.
-
-        alert("Enter-Taste wurde gedrückt.");
-    }
-});
-
-        </script>
+</script>
 </body>
 </html>

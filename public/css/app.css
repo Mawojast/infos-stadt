@@ -134,22 +134,22 @@ background-color: rgba(255, 255, 255, 0.4);
 font-size: 100%;
 position: absolute;
 top: 25%;
-
-
 pointer-events: none;
 transition: all 0.3s ease;
 color: rgb(100, 100, 100);
 width: 10%;
 }
 
-.inputGroup :is(input:focus, input:valid)~label {
-transform: translateY(-50%) scale(.9);
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-color:rgb(100, 100, 100)
+.inputGroup :is(input:focus)~label {
+    transform: translateY(-50%) scale(.9);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color:rgb(100, 100, 100);
 }
-
+.inputGroup :is(input:valid)~label {
+    display: none;
+}
 
 #scroll-to-top {
 position: fixed;
@@ -174,3 +174,62 @@ text-decoration-color: #0b0d0f;
 padding-top: 17px;
 font-size: 20px;
 }
+
+
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/* .loading-square{
+    width: 10rem;
+    height: 10rem;
+    background-color: #0b0d0f;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    animation: rotate 0.1s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+} */
+/*++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*loading spinner*/
+
+/* .loader{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #bfbfbf;
+    transition: opacity 0.75s, visibility 0.75s;
+}
+.loader-hidden{
+    opacity: 0;
+    visibility: hidden;
+}
+.loader::after{
+    content: "";
+    width: 75px;
+    height: 75px;
+    border: 15px solid #dddddd;
+    border-top-color: #7449f5;
+    border-radius: 50%;
+    animation: loading 0.75s ease infinite;
+}
+@keyframes loading{
+    from{
+        transform: rotate(0turn);
+    }
+    to{
+        transform: rotate(1turn);
+    }
+} */

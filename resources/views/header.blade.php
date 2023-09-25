@@ -16,6 +16,7 @@
         <div class="inputGroup">
     <form method="get" action="{{ route('search') }}" class="input-group container" id="search-city-form">
         <input type="text" class="form-control" name="stadt" autocomplete="off" required="" id="city">
+        
         <label for="city" class="form-label text-center"><span><strong>Stadt:</strong></span></label>
 
     <button class="btn search-form-button" type="submit"><img src={{asset('zoom.png')}} class="roundedt" width="35" height="35" alt="..." style="float: left"></button>

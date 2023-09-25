@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\classes\WeatherManager;
 use App\Traits\DirectoryHelper;
 use Cache;
 use DateTime;
@@ -12,6 +13,7 @@ use Exception;
 use OpenAI\Laravel\Facades\OpenAI;
 use App\Models\City;
 use App\Classes\Article;
+use App\Classes\Weather;
 use App\Classes\ArticleManager;
 use App\Classes\UrlApi;
 use App\Classes\OpenWeatherMap;
@@ -32,41 +34,38 @@ class HomeController extends Controller
 
         $weather = $this->getWeather($request->stadt);
 
-        if(isset($weather['cod']) && $weather['cod'] === 200){
+        if(!empty($weather->code)){
 
-            $city = City::where('name', $weather['name'])->where('latitude', $weather['coord']['lat'])->where('longitude', $weather['coord']['lon'])->get();
+            $city = City::where('name', $weather->city)->where('latitude', $weather->lat)->where('longitude', $weather->lon)->get();
 
             if($city->isEmpty()){
-                $cityDescription = $this->getCityDescription($weather['name'], $weather['coord']['lat'], $weather['coord']['lon']);
+                $cityDescription = $this->getCityDescription($weather->city, $weather->lat, $weather->lon);
 
                 City::insert([
-                    'name' => $weather['name'],
-                    'longitude' => $weather['coord']['lon'],
-                    'latitude' => $weather['coord']['lat'],
-                    'country' => $weather['sys']['country'],
+                    'name' => $weather->city,
+                    'longitude' => $weather->lon,
+                    'latitude' => $weather->lat,
+                    'country' => $weather->country,
                     'description' => $cityDescription,
-                    'timezone' => $weather['timezone'],
+                    'timezone' => $weather->timezone,
                     'created_at' => Carbon::now(),
                 ]);
             }else{
                 $cityDescription = $city[0]->description;
             }
-            $dateTime = gmdate("H:i", time() + $weather['timezone']);
-            $time = new DateTime($dateTime);
-            $hour = date('H', $time->getTimestamp());
-            $minute = date('i', $time->getTimestamp());
-            $is_day = $this->is_day($hour, $minute);
+            $weatherManager = new WeatherManager($weather);
 
-            $titleIcons = $this->getTitleIcons($weather['weather'][0]['id'], $is_day);
-            $weatherIconPath = $this->getWeatherImagePath($weather['weather'][0]['id'], $is_day, 'page_icon');
-            $weatherBackgroundImagePath = $this->getWeatherImagePath($weather['weather'][0]['id'], $is_day, 'background_image');
+            $dateTime = $weatherManager->getTime();
+            $is_day = $weatherManager->is_day();
+            $titleIcons = $weatherManager->getTitleIcons(app_path('Data/weather_codes.json'));
+            $weatherIconPath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/weather/');
+            $weatherBackgroundImagePath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/background/');
 
-            Cache::clear();
             if(Cache::has($request->getRequestUri())){
                 echo "getRequest";
                 $articles = Cache::get($request->getRequestUri());
             }else{
-                $articles = $this->getMediaStack($weather['name']);
+                $articles = $this->getMediaStack($weather->city);
                 Cache::put($request->getRequestUri(), $articles, 60);
             }
             return view('city', compact('weather', 'weatherIconPath','weatherBackgroundImagePath', 'articles', 'is_day', 'dateTime', 'cityDescription', 'articles', 'titleIcons'));
@@ -78,39 +77,37 @@ class HomeController extends Controller
     public function city($city, Request $request){
 
         $weather = $this->getWeather($city);
-        if( isset($weather['cod']) && $weather['cod'] === 200){
-            $city = City::where('name', $weather['name'])->where('latitude', $weather['coord']['lat'])->where('longitude', $weather['coord']['lon'])->get();
+        if( !empty($weather->code)){
+            $city = City::where('name', $weather->city)->where('latitude', $weather->lat)->where('longitude', $weather->lon)->get();
 
             if($city->isEmpty()){
                 $cityDescription = $this->getChat($weather);
                 City::insert([
-                    'name' => $weather['name'],
-                    'longitude' => $weather['coord']['lon'],
-                    'latitude' => $weather['coord']['lat'],
-                    'country' => $weather['sys']['country'],
+                    'name' => $weather->city,
+                    'longitude' => $weather->lon,
+                    'latitude' => $weather->lat,
+                    'country' => $weather->country,
                     'description' => $cityDescription,
-                    'timezone' => $weather['timezone'],
+                    'timezone' => $weather->timezone,
                     'created_at' => Carbon::now(),
                 ]);
             }else{
                 $cityDescription = $city[0]->description;
             }
-            $dateTime = gmdate("H:i", time() + $weather['timezone']);
-            $time = new DateTime($dateTime);
-            $hour = date('H', $time->getTimestamp());
-            $minute = date('i', $time->getTimestamp());
-            $is_day = $this->is_day($hour, $minute);
 
-            $titleIcons = $this->getTitleIcons($weather['weather'][0]['id'], $is_day);
-            $weatherIconPath = $this->getWeatherImagePath($weather['weather'][0]['id'], $is_day, 'page_icon');
-            $weatherBackgroundImagePath = $this->getWeatherImagePath($weather['weather'][0]['id'], $is_day, 'background_image');
+            $weatherManager = new WeatherManager($weather);
 
-            Cache::clear();
+            $dateTime = $weatherManager->getTime();
+            $is_day = $weatherManager->is_day();
+            $titleIcons = $weatherManager->getTitleIcons(app_path('Data/weather_codes.json'));
+            $weatherIconPath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/weather/');
+            $weatherBackgroundImagePath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/background/');
+
             if(Cache::has($request->getRequestUri())){
                 echo "getRequest";
                 $articles = Cache::get($request->getRequestUri());
             }else{
-                $articles = $this->getMediaStack($weather['name']);
+                $articles = $this->getMediaStack($weather->city);
                 Cache::put($request->getRequestUri(), $articles, 60);
             }
 
@@ -145,7 +142,7 @@ class HomeController extends Controller
         return view('imprint');
     }
 
-    public function getWeather($city): array{
+    public function getWeather($city): Weather{
 
         try{
             $OpenWeatherMapApi = new OpenWeatherMap();
@@ -157,11 +154,26 @@ class HomeController extends Controller
             $OpenWeatherMapApi->request();
             $apiResult = $OpenWeatherMapApi->getResult();
 
+            if($apiResult['cod'] === 200){
+                $Weather = new Weather(
+                    $apiResult['weather'][0]['id'],
+                    $apiResult['sys']['country'],
+                    $apiResult['name'],
+                    $apiResult['coord']['lat'],
+                    $apiResult['coord']['lon'],
+                    $apiResult['weather'][0]['description'],
+                    $apiResult['main']['temp'],
+                    $apiResult['wind']['speed'],
+                    $apiResult['timezone']);
+
+                return $Weather;
+            }
+
         }catch(Exception $e){
-            $apiResult =[];
+            return new Weather();
         }
 
-        return $apiResult;
+        return new Weather();
     }
 
     public function getNews($city){
@@ -352,9 +364,6 @@ class HomeController extends Controller
         $rootPath = '';
         if($type == 'page_icon'){
             $rootPath = 'images/weather/';
-        }
-        elseif($type == 'title_icon'){
-
         }
         elseif($type == 'background_image'){
             $rootPath = 'images/background/';

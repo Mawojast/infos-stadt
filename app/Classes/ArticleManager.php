@@ -1,6 +1,5 @@
 <?php
 namespace App\classes;
-use App\Traits;
 use App\Traits\DirectoryHelper;
 final class ArticleManager{
 
