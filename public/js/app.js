@@ -52,8 +52,10 @@ $(document).ready(function() {
     $(".spinner-box").css("display", "none");
     $("#search-city-form").on("submit", function(event){
         $(".spinner-grow").css("display", "block");
+        $(".search-button-image").css("display", "none")
         setTimeout(function() {
             $(".spinner-grow").css("display", "none");
+            $(".search-button-image").css("display", "block")
         }, 5000);
     })
 });

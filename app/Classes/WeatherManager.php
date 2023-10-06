@@ -8,25 +8,18 @@ final class WeatherManager{
 
     use DirectoryHelper;
 
-    private $time = '';
-    private $is_day = true;
-    private $icons = [];
-    private $backgroundImage = '';
-    private $pageIcon = '';
+    private string $time = '';
+    private bool $is_day = true;
+    private array $icons = [];
+    private string $backgroundImage = '';
+    private string $pageIcon = '';
 
 
 
     public function __construct(
         public Weather $weather
     ){}
-    // public function setWeatherCodes(string $weatherCodes,){
 
-    //     $this->weatherCodes = json_decode($weatherCodes, true);
-    //     $this->setTitleIcons($this->is_day);
-    //     $this->backgroundImage = $this->setWeatherImagePath($this->is_day, 'images/background');
-    //     $this->pageIcon = $this->setWeatherImagePath($this->is_day, 'images/weaher');
-
-    // }
     public function getTime(): string{
 
         $time = '';
@@ -142,7 +135,7 @@ final class WeatherManager{
         return $icons;
     }
 
-    public function getWeatherImagePath($weatherCodes, string $rootPath){
+    public function getWeatherImagePath(string $weatherCodes, string $rootPath): string{
 
         $json = file_get_contents($weatherCodes);
         $weatherCodes = json_decode($json, true);

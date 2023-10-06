@@ -7,7 +7,7 @@ final class UrlApi implements Api{
     private string $host = '';
     private array $queries = [];
     private array $result = [];
-    private $substitutedArticleImage = [];
+    private array $substitutedArticleImage = [];
 
     public function __construct(string $host){
 

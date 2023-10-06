@@ -4,15 +4,15 @@ use App\Traits\DirectoryHelper;
 final class ArticleManager{
 
     use DirectoryHelper;
-    public $articles = [];
-    private $substitutedArticleImage = [];
+    public array $articles = [];
+    private array $substitutedArticleImage = [];
 
-    public function addArticle(Article $article){
+    public function addArticle(Article $article): void{
 
         $this->articles[] = $article;
     }
 
-    public function removeDoubleArticles(){
+    public function removeDoubleArticles(): void{
 
         $searchForSameArticles = $this->articles;
         for($i = 0; $i < count($searchForSameArticles)-1; $i++){
@@ -26,7 +26,7 @@ final class ArticleManager{
         array_values($this->articles);
     }
 
-    public function substituteArticleImage(&$article) {
+    public function substituteArticleImage(&$article): void {
 
         if(empty($article->imagePath)){
             $pathToImage = $this->getRandomFilePath($this->getPublicFilePaths('images/article_substitute/'));
@@ -39,7 +39,7 @@ final class ArticleManager{
         }
     }
 
-    public function setEmptyArticleImages(){
+    public function setEmptyArticleImages(): void{
 
         foreach($this->articles as $article){
             $this->substituteArticleImage($article);
@@ -53,12 +53,6 @@ final class ArticleManager{
                 $article->description = substr($article->description, 0, $length);
             }
         }
-        // $a = array_map(function($article) use ($length){
-        //     return $article->description = substr($article->description, 0, $length);
-        // }, $this->articles);
-        // foreach($this->articles as $article){
-        //     var_dump($article->description);
-        // }
     }
 }
 ?>

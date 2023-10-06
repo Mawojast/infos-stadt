@@ -11,6 +11,6 @@ class Weather{
         public string $description = '',
         public string $temperature = '',
         public string $windSpeed = '',
-        public int $timezone = 0
+        public int    $timezone = 0
     ){}
 }

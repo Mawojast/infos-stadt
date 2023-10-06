@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\classes\WeatherManager;
 use App\Traits\DirectoryHelper;
 use Cache;
-use DateTime;
-use DateTimeZone;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Exception;
@@ -36,23 +34,8 @@ class HomeController extends Controller
 
         if(!empty($weather->code)){
 
-            $city = City::where('name', $weather->city)->where('latitude', $weather->lat)->where('longitude', $weather->lon)->get();
-
-            if($city->isEmpty()){
-                $cityDescription = $this->getCityDescription($weather->city, $weather->lat, $weather->lon);
-
-                City::insert([
-                    'name' => $weather->city,
-                    'longitude' => $weather->lon,
-                    'latitude' => $weather->lat,
-                    'country' => $weather->country,
-                    'description' => $cityDescription,
-                    'timezone' => $weather->timezone,
-                    'created_at' => Carbon::now(),
-                ]);
-            }else{
-                $cityDescription = $city[0]->description;
-            }
+            $cityDescription = $this->getCityDiscription($weather);
+            
             $weatherManager = new WeatherManager($weather);
 
             $dateTime = $weatherManager->getTime();
@@ -74,26 +57,12 @@ class HomeController extends Controller
         }
 
     }
-    public function city($city, Request $request){
+    public function city(string $city, Request $request){
 
         $weather = $this->getWeather($city);
         if( !empty($weather->code)){
-            $city = City::where('name', $weather->city)->where('latitude', $weather->lat)->where('longitude', $weather->lon)->get();
+            $cityDescription = $this->getCityDiscription($weather);
 
-            if($city->isEmpty()){
-                $cityDescription = $this->getChat($weather);
-                City::insert([
-                    'name' => $weather->city,
-                    'longitude' => $weather->lon,
-                    'latitude' => $weather->lat,
-                    'country' => $weather->country,
-                    'description' => $cityDescription,
-                    'timezone' => $weather->timezone,
-                    'created_at' => Carbon::now(),
-                ]);
-            }else{
-                $cityDescription = $city[0]->description;
-            }
 
             $weatherManager = new WeatherManager($weather);
 
@@ -142,7 +111,7 @@ class HomeController extends Controller
         return view('imprint');
     }
 
-    public function getWeather($city): Weather{
+    public function getWeather(string $city): Weather{
 
         try{
             $OpenWeatherMapApi = new OpenWeatherMap();
@@ -176,7 +145,7 @@ class HomeController extends Controller
         return new Weather();
     }
 
-    public function getNews($city){
+    public function getNews(string $city): array{
 
         try{
 
@@ -208,7 +177,7 @@ class HomeController extends Controller
         }
     }
 
-    public function getMediaStack($city){
+    public function getMediaStack(string $city): array{
 
         try{
 
@@ -244,7 +213,30 @@ class HomeController extends Controller
         }
     }
 
-    public function getCityDescription($name, $lat, $lon){
+    public function getCityDiscription(Weather $weather): string{
+
+        $cityDescription = '';
+
+        $city = City::where('name', $weather->city)->where('latitude', $weather->lat)->where('longitude', $weather->lon)->get();
+
+        if($city->isEmpty()){
+            $cityDescription = $this->generateCityDescription($weather->city, $weather->lat, $weather->lon);
+            City::insert([
+                'name' => $weather->city,
+                'longitude' => $weather->lon,
+                'latitude' => $weather->lat,
+                'country' => $weather->country,
+                'description' => $cityDescription,
+                'timezone' => $weather->timezone,
+                'created_at' => Carbon::now(),
+            ]);
+        }else{
+            $cityDescription = $city[0]->description;
+        }
+
+        return $cityDescription;
+    }
+    public function generateCityDescription(string $name, float $lat, float $lon): string{
         try{
             $random = rand(1, 2);
             $promptName = 'PROMPT_'.$random;
@@ -260,177 +252,4 @@ class HomeController extends Controller
             return '';
         }
     }
-
-    public function is_day($hour, $minute){
-
-        $currentTime = Carbon::createFromTime($hour, $minute);
-        $startTime = Carbon::createFromTime(5, 0, 0);
-        $endTime = Carbon::createFromTime(22, 0, 0);
-
-        return ($currentTime->greaterThanOrEqualTo($startTime) && $currentTime->lessThanOrEqualTo($endTime));
-    }
-
-    public function getTitleIcons(int $id, bool $is_day){
-
-        $icons = [];
-        $weatherCode = [
-            "clear" => [800],
-            "fewClouds" => [801],
-            "moderateClouds" => [802, 803],
-            "overcastClouds" => [804],
-            "moderateRain" => [500, 501, 502, 503, 504],
-            "heavyRain" => [511, 520, 521, 522, 531],
-            "thunderstorm" => [200, 201, 202, 210, 211, 212, 221, 230, 231, 232],
-            "drizzle" =>[300, 301, 302, 310, 311, 312, 313, 314, 321],
-            "mist" => [701, 711, 721, 731, 741, 751, 761, 762, 771, 781]
-        ];
-
-        if(in_array($id, $weatherCode['clear'])){
-            if($is_day){
-                $icons[] = '&#9728;';
-            }else{
-                $icons[] ='&#9790;';
-            }
-        }
-        if(in_array($id, $weatherCode["fewClouds"])){
-            if($is_day){
-                $icons[] = '&#9728;';
-                $icons[] = '&#9729;';
-            }else{
-                $icons[] ='&#9790;';
-                $icons[] = '&#9729;';
-            }
-        }
-        if(in_array($id, $weatherCode["moderateClouds"])){
-            if($is_day){
-                $icons[] = '&#9728;';
-                $icons[] = '&#9729;';
-            }
-        }
-        if(in_array($id, $weatherCode["overcastClouds"])){
-            if($is_day){
-                $icons[] = '&#9729;';
-            }else{
-                $icons[] ='&#x1F312;';
-                $icons[] = '&#9729;';
-            }
-        }
-        if(in_array($id, $weatherCode["moderateRain"])){
-            if($is_day){
-                $icons[] = '&#9730;';
-            }else{
-                $icons[] ='&#x1F312;';
-                $icons[] = '&#9730;';
-            }
-        }
-        if(in_array($id, $weatherCode["heavyRain"])){
-            if($is_day){
-                $icons[] = '&#9730;';
-            }else{
-                $icons[] ='&#x1F312;';
-                $icons[] = '&#9730;';
-            }
-        }
-        if(in_array($id, $weatherCode["thunderstorm"])){
-            if($is_day){
-                $icons[] = '&#9730;';
-                $icons[] = '&#9888;';
-            }else{
-                $icons[] ='&#x1F312;';
-                $icons[] = '&#9888;';
-            }
-
-        }
-        if(in_array($id, $weatherCode["drizzle"])){
-            if($is_day){
-                $icons[] = '&#9730;';
-            }else{
-                $icons[] = '&#9730;';
-            }
-        }
-
-        if(in_array($id, $weatherCode["mist"])){
-            if($is_day){
-                $icons[] = '&#127787;';
-            }else{
-                $icons[] = '&#127787;';
-            }
-        }
-
-        return $icons;
-    }
-    public function getWeatherImagePath($id, $is_day, $type){
-
-        $rootPath = '';
-        if($type == 'page_icon'){
-            $rootPath = 'images/weather/';
-        }
-        elseif($type == 'background_image'){
-            $rootPath = 'images/background/';
-        }
-        $folderPath = '';
-        $weatherCode = [
-            "clear" => [800],
-            "fewClouds" => [801],
-            "moderateClouds" => [802, 803],
-            "overcastClouds" => [804],
-            "moderateRain" => [500, 501, 502, 503, 504],
-            "heavyRain" => [511, 520, 521, 522, 531],
-            "thunderstorm" => [200, 201, 202, 210, 211, 212, 221, 230, 231, 232],
-            "drizzle" =>[300, 301, 302, 310, 311, 312, 313, 314, 321],
-            "mist" => [701, 711, 721, 731, 741, 751, 761, 762, 771, 781]
-        ];
-
-        if(in_array($id, $weatherCode['clear'])){
-            $folderPath = $rootPath.'clear/';
-        }
-        if(in_array($id, $weatherCode["fewClouds"])){
-            $folderPath = $rootPath.'few_clouds/';
-        }
-        if(in_array($id, $weatherCode["moderateClouds"])){
-            $folderPath = $rootPath.'few_clouds/';
-        }
-        if(in_array($id, $weatherCode["overcastClouds"])){
-            $folderPath = $rootPath.'overcast_clouds/';
-        }
-        if(in_array($id, $weatherCode["moderateRain"])){
-            $folderPath = $rootPath.'moderate_rain/';
-        }
-        if(in_array($id, $weatherCode["heavyRain"])){
-            $folderPath = $rootPath.'heavy_rain/';
-        }
-        if(in_array($id, $weatherCode["thunderstorm"])){
-            $folderPath = $rootPath.'thunderstorm/';
-        }
-        if(in_array($id, $weatherCode["drizzle"])){
-            $folderPath = $rootPath.'drizzle/';
-        }
-        if(in_array($id, $weatherCode["mist"])){
-            $folderPath = $rootPath.'mist/';
-        }
-
-        if( $is_day){
-            $filePath = $this->getRandomFilePath($this->getPublicFilePaths($folderPath.'day/'));
-        }else{
-            $filePath = $this->getRandomFilePath($this->getPublicFilePaths($folderPath.'night/'));
-        }
-
-        return $filePath;
-    }
-
-    public function getCountryTimezone($countryCode){
-
-        $timezone_identifiers = DateTimeZone::listIdentifiers(DateTimeZone::PER_COUNTRY, $countryCode);
-        if (count($timezone_identifiers) > 0) {
-            return new DateTimeZone($timezone_identifiers[array_key_last($timezone_identifiers)]);
-        } else {
-            return null;
-        }
-    }
-
-    public function getCountryTime($timezone){
-        date_default_timezone_set($timezone);
-        return date('H:i:s');
-    }
-
 }
