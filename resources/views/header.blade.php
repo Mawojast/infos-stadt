@@ -1,13 +1,13 @@
 <nav class="navigation p-1">
     <a href="{{route('home')}}" class="navigation-link"><img src={{asset('info-1.png')}} class="roundedt" width="35" height="35" alt="..." style="float: left"></a>
-    <div class="container py-1">
+    <div class="container py-1 navigation-link-container">
         <a class="navigation-link p-1 px-4 @if(request()->routeIs('home')) active-link
                                     @elseif(request()->routeIs('search*'))active-link @endif" href="{{route('home')}}">
             Suche
         </a>
         <a class="navigation-link p-1 px-4 @if(request()->routeIs('list*'))active-link
                                         @endif" href="{{route('list')}}">
-            Städte
+            Liste
         </a>
     </div>
 </nav>
@@ -31,8 +31,3 @@
     </form>
 </div>
 </div>
-
-
-
-
-

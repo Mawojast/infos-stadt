@@ -2,15 +2,16 @@
 @section('main')
 
 <div class="container pt-3">
-    <div class="row text-center letterList">
-        <ul class="firstLetterList">
-            @for($i = 65; $i <= 90; $i++)
+
+    <div class=" text-center">
+        <ul class="listContainer">
+        @for($i = 65; $i <= 90; $i++)
             @php
                 $char = strtolower(html_entity_decode("&#".$i.";"));
             @endphp
             {{-- <li class="d-inline-block letter p-1"><a href="{{route('listByLetter', $char)}}"><strong>&#{{$i}};</strong></a></li> --}}
-            <li class="d-inline-block letter p-1"><a href="#{{$char}}"><strong>&#{{$i}};</strong></a></li>
-            @endfor
+            <li class="p-2 d-inline"><a href="#{{$char}}"><strong class="listLetterLink">&#{{$i}};</strong></a></li>
+        @endfor
         </ul>
     </div>
     <div class="row">
