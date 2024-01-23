@@ -67,7 +67,7 @@ final class WeatherManager{
                 $icons[] ='&#9790;';
             }
         }
-        if(in_array($this->weather->code, $weatherCodes["fewClouds"])){
+        elseif(in_array($this->weather->code, $weatherCodes["fewClouds"])){
             if($this->is_day()){
                 $icons[] = '&#9728;';
                 $icons[] = '&#9729;';
@@ -76,13 +76,13 @@ final class WeatherManager{
                 $icons[] = '&#9729;';
             }
         }
-        if(in_array($this->weather->code, $weatherCodes["moderateClouds"])){
+        elseif(in_array($this->weather->code, $weatherCodes["moderateClouds"])){
             if($this->is_day()){
                 $icons[] = '&#9728;';
                 $icons[] = '&#9729;';
             }
         }
-        if(in_array($this->weather->code, $weatherCodes["overcastClouds"])){
+        elseif(in_array($this->weather->code, $weatherCodes["overcastClouds"])){
             if($this->is_day()){
                 $icons[] = '&#9729;';
             }else{
@@ -90,7 +90,7 @@ final class WeatherManager{
                 $icons[] = '&#9729;';
             }
         }
-        if(in_array($this->weather->code, $weatherCodes["moderateRain"])){
+        elseif(in_array($this->weather->code, $weatherCodes["moderateRain"])){
             if($this->is_day()){
                 $icons[] = '&#9730;';
             }else{
@@ -98,7 +98,7 @@ final class WeatherManager{
                 $icons[] = '&#9730;';
             }
         }
-        if(in_array($this->weather->code, $weatherCodes["heavyRain"])){
+        elseif(in_array($this->weather->code, $weatherCodes["heavyRain"])){
             if($this->is_day()){
                 $icons[] = '&#9730;';
             }else{
@@ -106,7 +106,7 @@ final class WeatherManager{
                 $icons[] = '&#9730;';
             }
         }
-        if(in_array($this->weather->code, $weatherCodes["thunderstorm"])){
+        elseif(in_array($this->weather->code, $weatherCodes["thunderstorm"])){
             if($this->is_day()){
                 $icons[] = '&#9730;';
                 $icons[] = '&#9888;';
@@ -116,19 +116,25 @@ final class WeatherManager{
             }
 
         }
-        if(in_array($this->weather->code, $weatherCodes["drizzle"])){
+        elseif(in_array($this->weather->code, $weatherCodes["drizzle"])){
             if($this->is_day()){
                 $icons[] = '&#9730;';
             }else{
                 $icons[] = '&#9730;';
             }
         }
-
-        if(in_array($this->weather->code, $weatherCodes["mist"])){
+        elseif(in_array($this->weather->code, $weatherCodes["mist"])){
             if($this->is_day()){
                 $icons[] = '&#127787;';
             }else{
                 $icons[] = '&#127787;';
+            }
+        }
+        else{
+            if($this->is_day()){
+                $icons[] = '&#9728;';
+            }else{
+                $icons[] ='&#9790;';
             }
         }
 
@@ -144,29 +150,32 @@ final class WeatherManager{
         if(in_array($this->weather->code, $weatherCodes['clear'])){
             $folderPath = $rootPath.'clear/';
         }
-        if(in_array($this->weather->code, $weatherCodes["fewClouds"])){
+        elseif(in_array($this->weather->code, $weatherCodes["fewClouds"])){
             $folderPath = $rootPath.'few_clouds/';
         }
-        if(in_array($this->weather->code, $weatherCodes["moderateClouds"])){
+        elseif(in_array($this->weather->code, $weatherCodes["moderateClouds"])){
             $folderPath = $rootPath.'few_clouds/';
         }
-        if(in_array($this->weather->code, $weatherCodes["overcastClouds"])){
+        elseif(in_array($this->weather->code, $weatherCodes["overcastClouds"])){
             $folderPath = $rootPath.'overcast_clouds/';
         }
-        if(in_array($this->weather->code, $weatherCodes["moderateRain"])){
+        elseif(in_array($this->weather->code, $weatherCodes["moderateRain"])){
             $folderPath = $rootPath.'moderate_rain/';
         }
-        if(in_array($this->weather->code, $weatherCodes["heavyRain"])){
+        elseif(in_array($this->weather->code, $weatherCodes["heavyRain"])){
             $folderPath = $rootPath.'heavy_rain/';
         }
-        if(in_array($this->weather->code, $weatherCodes["thunderstorm"])){
+        elseif(in_array($this->weather->code, $weatherCodes["thunderstorm"])){
             $folderPath = $rootPath.'thunderstorm/';
         }
-        if(in_array($this->weather->code, $weatherCodes["drizzle"])){
+        elseif(in_array($this->weather->code, $weatherCodes["drizzle"])){
             $folderPath = $rootPath.'drizzle/';
         }
-        if(in_array($this->weather->code, $weatherCodes["mist"])){
+        elseif(in_array($this->weather->code, $weatherCodes["mist"])){
             $folderPath = $rootPath.'mist/';
+        }
+        else{
+            $folderPath = $rootPath.'clear/';
         }
 
         if( $this->is_day()){

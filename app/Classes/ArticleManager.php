@@ -26,7 +26,7 @@ final class ArticleManager{
         array_values($this->articles);
     }
 
-    public function substituteArticleImage(&$article): void {
+    private function substituteArticleImage(&$article): void {
 
         if(empty($article->imagePath)){
             $pathToImage = $this->getRandomFilePath($this->getPublicFilePaths('images/article_substitute/'));

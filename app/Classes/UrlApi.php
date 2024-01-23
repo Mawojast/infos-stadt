@@ -20,23 +20,27 @@ final class UrlApi implements Api{
 
     public function request(): void{
 
-        try{
+        $httpQuery = http_build_query($this->queries);
+        $curl = curl_init(sprintf('%s?%s', $this->host, $httpQuery));
 
-            $httpQuery = http_build_query($this->queries);
-            $curl = curl_init(sprintf('%s?%s', $this->host, $httpQuery));
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, [
-                'User-Agent: ' . 'localhost',
-            ]);
-            $json = curl_exec($curl);
-            curl_close($curl);
-
-            $this->result = json_decode($json, true);
-
-        }catch(Exception $e){
-
-            $this->result = [];
+        if(!$curl){
+            throw new Exception("Curl init failed");
         }
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            'User-Agent: ' . 'infos-stadt',
+        ]);
+
+        $json = curl_exec($curl);
+
+        if(curl_errno($curl)){
+            throw new Exception('Curl error: '. curl_error($curl));
+        }
+
+        curl_close($curl);
+        $this->result = json_decode($json, true);
+
     }
 
     public function getResult(): array{

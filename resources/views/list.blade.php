@@ -36,13 +36,19 @@
                         }
                     }
                     if(ord(substr($cities[$i]->name, 0, 1)) > $letterCode + 1 && ord(substr($cities[$i-1]->name, 0, 1)) == $letterCode){
+                        
                         if($lastSettedLabel != ord(substr($cities[$i]->name, 0, 1))){
+
                             for($j = $i - 1; $j >= 0; $j--){
                                 if(ord(substr($cities[$j]->name, 0, 1)) == ord(substr($cities[$i]->name, 0, 1))){
+
                                     $lastSettedLabel = $letterCode;
-                                    $id = strtolower(html_entity_decode('&#'.$letterCode.';'));
+                                    $labelId = $letterCode+1;
+
+                                    $id = strtolower(html_entity_decode('&#'.$labelId.';'));
                                     $labelSetted = true;
                                     $letter = $letterCode + 1;
+
                                     echo '<h2 class="letterLabel ps-1 mt-1" id="'.$id.'">&#'.$letter.'</h2>';
                                 }
                             }

@@ -15,6 +15,7 @@
     <div class=" mt-4">
         <div class="inputGroup">
     <form method="get" action="{{ route('search') }}" class="input-group container" id="search-city-form">
+        @csrf
         <input type="text" class="form-control" name="stadt" autocomplete="off" required="" id="city">
 
         <label for="city" class="form-label text-center"><span><strong>Stadt:</strong></span></label>

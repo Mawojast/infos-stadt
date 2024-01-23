@@ -15,8 +15,10 @@ class HttpHeaders
      */
     public function handle(Request $request, Closure $next): Response
     {
-        header("X-Frame-Options: SAMEORIGIN");
+        header("X-Frame-Options: DENY");
         header("Content-Language: de-DE");
+        header("X-Content-Type-Options: nosniff");
+        header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
         return $next($request);
     }
 }

@@ -3,28 +3,22 @@
     color: #0b0d0f;
 }
 
-
-
-
 body::-webkit-scrollbar {
     width: 11px;
-  }
-  body {
+}
+body {
     scrollbar-width: thin;
     scrollbar-color: var(--thumbBG) var(--scrollbarBG);
-  }
-  body::-webkit-scrollbar-track {
+}
+
+body::-webkit-scrollbar-track {
     background: #e8e8e8;
-  }
-  body::-webkit-scrollbar-thumb {
+}
+
+body::-webkit-scrollbar-thumb {
     background-color: #0b0d0f;
-
     border: 3px solid var(--scrollbarBG);
-  }
-
-
-
-
+}
 
 p{
     font-size: 1rem;
@@ -43,7 +37,7 @@ p{
     font-weight: 600;
 }
 
- .navigation-link:hover{
+.navigation-link:hover{
     color: #e8e8e8;
     background-color: rgb(0, 0, 0);
     backdrop-filter: blur(5px);
@@ -58,7 +52,6 @@ p{
 }
 
 .navigation-link-container:hover .navigation-link:not(:hover) {
-
     opacity: 0.7;
 }
 
@@ -74,7 +67,7 @@ p{
 
     backdrop-filter: blur(2px); background-color: rgba(255, 255, 255, 0);
     border-radius: 5px;
-    box-shadow: 0px 35px 68px 0px rgba(145, 192, 255, 0.5), inset 0px -6px 10px 0px rgba(145, 192, 255, 0.6), inset 0px 5px 22px 0px rgba(145, 192, 255, 0.6);
+    box-shadow: 0px 5px 20px 0px rgba(114, 124, 150, 0.5), inset 0px -6px 10px 0px rgba(114, 124, 150, 0.6), inset 0px 5px 10px 0px rgba(114, 124, 150, 0.6);
 }
 .time-info-box{
     box-shadow: inset 5px 5px 5px rgba(0,0,0,0.2),
@@ -138,38 +131,34 @@ a{
     position: relative;
 }
 
-
-
 .inputGroup input {
-font-size: 100%;
-padding: 0.8em;
-outline: none;
-border: none;
-background-color: #e8e8e8;
-border-radius: 0;
-width: 100%;
+    font-size: 100%;
+    padding: 0.8em;
+    outline: none;
+    border: none;
+    background-color: #e8e8e8;
+    border-radius: 0;
+    width: 100%;
 }
-
-
 
 
 .search-form-button{
-background-color: #0b0d0f;
-border-radius: 0;
+    background-color: #0b0d0f;
+    border-radius: 0;
 }
 .search-form-button:hover{
-background-color: #0b0d0f;
+    background-color: #0b0d0f;
 }
 
 
 .inputGroup label {
-font-size: 100%;
-position: absolute;
-top: 25%;
-pointer-events: none;
-transition: all 0.3s ease;
-color: rgb(100, 100, 100);
-width: 10%;
+    font-size: 100%;
+    position: absolute;
+    top: 25%;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    color: rgb(100, 100, 100);
+    width: 10%;
 }
 
 .inputGroup :is(input:focus)~label {
@@ -184,30 +173,28 @@ width: 10%;
 }
 
 #scroll-to-top {
-position: fixed;
-bottom: 20px;
-right: 20px;
-width: 50px;
-height: 50px;
-background-color: #0b0d0f;
-text-align: center;
-color: #e8e8e8;
-border-radius: 0;
-display: none;
-z-index: 9999;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #0b0d0f;
+    text-align: center;
+    color: #e8e8e8;
+    border-radius: 0;
+    display: none;
+    z-index: 9999;
 }
 .activeLetterList{
-text-decoration-line: underline;
-text-decoration-thickness: 30%;
-text-decoration-color: #0b0d0f;
+    text-decoration-line: underline;
+    text-decoration-thickness: 30%;
+    text-decoration-color: #0b0d0f;
 }
 
 #scroll-to-top i {
-padding-top: 17px;
-font-size: 20px;
+    padding-top: 17px;
+    font-size: 20px;
 }
-
-
 
 .listContainer{
 
@@ -219,44 +206,40 @@ font-size: 20px;
 
 .listContainer::-webkit-scrollbar
 {
-  width: 5px;
-  background-color: #bfbfbf;;
-  margin-bottom: 3rem;
+    width: 5px;
+    background-color: #bfbfbf;;
+    margin-bottom: 3rem;
 }
 
 .listContainer::-webkit-scrollbar-track
 {
 
-  background-color: #bfbfbf;;
-  margin-bottom: 3rem;
-  height: 3px;
-  width: 3px;
+    background-color: #bfbfbf;;
+    margin-bottom: 3rem;
+    height: 3px;
+    width: 3px;
 }
 
-.listContainer::-webkit-scrollbar-thumb
-{
+.listContainer::-webkit-scrollbar-thumb{
 
     width: 5px;
-
     background-color: #000000;
     margin-bottom: 3rem;
     border: 4px solid #bfbfbf;;
 }
 
 
-  .navigation-link:hover .radio-btns__btn:not(:hover) {
+.navigation-link:hover .radio-btns__btn:not(:hover) {
     filter: grayscale(100%);
     opacity: 0.75;
-  }
+}
 
-  .navigation-link:hover .radio-btns__btn:not(:hover)::after {
+.navigation-link:hover .radio-btns__btn:not(:hover)::after {
     background-color: rgba(#000, 0.5);
-  }
-
+}
 
 
 @media only screen and (max-width: 992px) {
-
 
     .listContainer {
         display: flex;
@@ -268,9 +251,17 @@ font-size: 20px;
         margin: auto;
         margin-bottom: 2rem;
         scrollbar-width: thin;
+    }
 
-      }
-
+    .inputGroup label {
+        font-size: 100%;
+        position: absolute;
+        top: 25%;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        color: rgb(100, 100, 100);
+        width: 15%;
+    }
 }
 
 

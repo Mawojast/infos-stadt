@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\classes\WeatherManager;
+use App\Classes\WeatherManager;
 use App\Traits\DirectoryHelper;
 use Cache;
 use Illuminate\Http\Request;
@@ -30,12 +30,15 @@ class HomeController extends Controller
 
     public function search(Request $request){
 
+        if(!isset($request->stadt)){
+            abort(404);
+        }
         $weather = $this->getWeather($request->stadt);
 
         if(!empty($weather->code)){
 
             $cityDescription = $this->getCityDiscription($weather);
-            
+
             $weatherManager = new WeatherManager($weather);
 
             $dateTime = $weatherManager->getTime();
@@ -45,10 +48,9 @@ class HomeController extends Controller
             $weatherBackgroundImagePath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/background/');
 
             if(Cache::has($request->getRequestUri())){
-                echo "getRequest";
                 $articles = Cache::get($request->getRequestUri());
             }else{
-                $articles = $this->getMediaStack($weather->city);
+                $articles = $this->getNews($weather->city);
                 Cache::put($request->getRequestUri(), $articles, 60);
             }
             return view('city', compact('weather', 'weatherIconPath','weatherBackgroundImagePath', 'articles', 'is_day', 'dateTime', 'cityDescription', 'articles', 'titleIcons'));
@@ -73,10 +75,9 @@ class HomeController extends Controller
             $weatherBackgroundImagePath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/background/');
 
             if(Cache::has($request->getRequestUri())){
-                echo "getRequest";
                 $articles = Cache::get($request->getRequestUri());
             }else{
-                $articles = $this->getMediaStack($weather->city);
+                $articles = $this->getNews($weather->city);
                 Cache::put($request->getRequestUri(), $articles, 60);
             }
 
@@ -139,6 +140,7 @@ class HomeController extends Controller
             }
 
         }catch(Exception $e){
+            error_log("Weather API error - ".$e->getMessage(), 0);
             return new Weather();
         }
 
@@ -160,11 +162,15 @@ class HomeController extends Controller
             $result = $NewsApi->getResult();
 
             $ArticleManager = New ArticleManager();
-
             foreach($result['articles'] as $article){
-                $ArticleManager->addArticle(new Article($article['title'], $article['description'], $article['published_at'],$article['url'], $article['author'], $article['image']));
+                $ArticleManager->addArticle(new Article(
+                    $article['title'],
+                    $article['description'],
+                    $article['publishedAt'],
+                    $article['url'],
+                    $article['source']['name'],
+                    $article['urlToImage']));
             }
-
             $ArticleManager->removeDoubleArticles();
             $ArticleManager->setEmptyArticleImages();
 
@@ -172,7 +178,7 @@ class HomeController extends Controller
             return $ArticleManager->articles;
 
         }catch(Exception $e){
-
+            error_log("Article API error - ".$e->getMessage(),0);
             return [];
         }
     }
@@ -209,6 +215,7 @@ class HomeController extends Controller
             return $ArticleManager->articles;
 
         }catch(Exception $e){
+            error_log("Article API error - ".$e->getMessage(), 0);
             return [];
         }
     }
@@ -217,21 +224,25 @@ class HomeController extends Controller
 
         $cityDescription = '';
 
-        $city = City::where('name', $weather->city)->where('latitude', $weather->lat)->where('longitude', $weather->lon)->get();
+        try{
+            $city = City::where('name', $weather->city)->where('latitude', $weather->lat)->where('longitude', $weather->lon)->get();
 
-        if($city->isEmpty()){
-            $cityDescription = $this->generateCityDescription($weather->city, $weather->lat, $weather->lon);
-            City::insert([
-                'name' => $weather->city,
-                'longitude' => $weather->lon,
-                'latitude' => $weather->lat,
-                'country' => $weather->country,
-                'description' => $cityDescription,
-                'timezone' => $weather->timezone,
-                'created_at' => Carbon::now(),
-            ]);
-        }else{
-            $cityDescription = $city[0]->description;
+            if($city->isEmpty()){
+                $cityDescription = $this->generateCityDescription($weather->city, $weather->lat, $weather->lon);
+                City::insert([
+                    'name' => $weather->city,
+                    'longitude' => $weather->lon,
+                    'latitude' => $weather->lat,
+                    'country' => $weather->country,
+                    'description' => $cityDescription,
+                    'timezone' => $weather->timezone,
+                    'created_at' => Carbon::now(),
+                ]);
+            }else{
+                $cityDescription = $city[0]->description;
+            }
+        }catch(Exception $e){
+            error_log('Database error - '.$e->getMessage(), 0);
         }
 
         return $cityDescription;
@@ -247,8 +258,10 @@ class HomeController extends Controller
                 'max_tokens' => 1500,
                 'prompt' => $prompt,
             ]);
+
             return $result['choices'][0]['text'];
         }catch(Exception $e){
+            error_log("City description error - ".$e->getMessage(),0);
             return '';
         }
     }

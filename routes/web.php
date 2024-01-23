@@ -20,7 +20,6 @@ Route::controller(HomeController::class)->group(function(){
         Route::get('/suche', 'search')->name('search');
         Route::get('/stadt/{stadt}', 'city')->name('city');
     });
-
     Route::get('/', 'home')->name('home');
     Route::get('/home', 'home')->name('home');
     Route::get('/datenschutz', 'privacyPolicy')->name('privacyPolicy');
