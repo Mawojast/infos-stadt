@@ -46,6 +46,7 @@ class HomeController extends Controller
             $titleIcons = $weatherManager->getTitleIcons(app_path('Data/weather_codes.json'));
             $weatherIconPath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/weather/');
             $weatherBackgroundImagePath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/background/');
+            $countryName = $weatherManager->getCountryNameByCode(app_path('Data/country_codes.json'));
 
             if(Cache::has($request->getRequestUri())){
                 $articles = Cache::get($request->getRequestUri());
@@ -53,7 +54,7 @@ class HomeController extends Controller
                 $articles = $this->getNews($weather->city);
                 Cache::put($request->getRequestUri(), $articles, 60);
             }
-            return view('city', compact('weather', 'weatherIconPath','weatherBackgroundImagePath', 'articles', 'is_day', 'dateTime', 'cityDescription', 'articles', 'titleIcons'));
+            return view('city', compact('weather', 'weatherIconPath','weatherBackgroundImagePath', 'articles', 'is_day', 'dateTime', 'cityDescription', 'articles', 'titleIcons', 'countryName'));
         }else{
             return view('city_not_found');
         }
@@ -73,6 +74,7 @@ class HomeController extends Controller
             $titleIcons = $weatherManager->getTitleIcons(app_path('Data/weather_codes.json'));
             $weatherIconPath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/weather/');
             $weatherBackgroundImagePath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/background/');
+            $countryName = $weatherManager->getCountryNameByCode(app_path('Data/country_codes.json'));
 
             if(Cache::has($request->getRequestUri())){
                 $articles = Cache::get($request->getRequestUri());
@@ -81,7 +83,7 @@ class HomeController extends Controller
                 Cache::put($request->getRequestUri(), $articles, 60);
             }
 
-            return view('city', compact('weather', 'weatherIconPath','weatherBackgroundImagePath', 'articles', 'is_day', 'dateTime', 'cityDescription', 'articles', 'titleIcons'));
+            return view('city', compact('weather', 'weatherIconPath','weatherBackgroundImagePath', 'articles', 'is_day', 'dateTime', 'cityDescription', 'articles', 'titleIcons', 'countryName'));
         }else{
             return view('city_not_found');
         }
@@ -135,7 +137,7 @@ class HomeController extends Controller
                     $apiResult['main']['temp'],
                     $apiResult['wind']['speed'],
                     $apiResult['timezone']);
-
+                    var_dump($Weather);
                 return $Weather;
             }
 
@@ -155,6 +157,7 @@ class HomeController extends Controller
 
             $NewsApi->addParam('apiKey',env('NEWS_API_KEY'));
             $NewsApi->addParam('q', $city);
+            //$NewsApi->addParam('category','general');
             $NewsApi->addParam('language', 'de');
             $NewsApi->addParam('sortBy', 'publishedAt');
             $NewsApi->addParam('pageSize', 12);
@@ -254,7 +257,7 @@ class HomeController extends Controller
             $prompt = str_replace(['\'.$name.\'', '\'.$lat.\'', '\'.$lon.\''], [$name, $lat, $lon], env($promptName));
 
             $result = OpenAI::completions()->create([
-                'model' => 'text-davinci-003',
+                'model' => 'gpt-3.5-turbo-instruct',
                 'max_tokens' => 1500,
                 'prompt' => $prompt,
             ]);

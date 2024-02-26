@@ -2,8 +2,11 @@
 @section('main')
 
 <div class="container pt-3" >
-    <div class="main-content p-3 mt-3">
+    <div class="location-info-box text-center">
+        <small>{{$countryName}} - {{$weather->city}} - Breite: {{$weather->lat}} - Länge: {{$weather->lon}}</small>
+    </div>
 
+    <div class="main-content p-3 mt-3">
         <div class="d-flex flex-row justify-content-between">
             <div>
                 <h2 class="d-inline-flex text-justify">{{$weather->city}}</h2>

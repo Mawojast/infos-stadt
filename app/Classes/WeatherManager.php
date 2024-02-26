@@ -144,6 +144,8 @@ final class WeatherManager{
     public function getWeatherImagePath(string $weatherCodes, string $rootPath): string{
 
         $json = file_get_contents($weatherCodes);
+        if(!$json) return "";
+
         $weatherCodes = json_decode($json, true);
         $folderPath = '';
 
@@ -185,6 +187,16 @@ final class WeatherManager{
         }
 
         return $filePath;
+    }
+
+    public function getCountryNameByCode(string $countryCodes): string {
+
+        $json = file_get_contents($countryCodes);
+        if(!$json) return "";
+
+        $countryCodes = json_decode($json, true);
+
+        return array_key_exists(strtoupper($this->weather->country), $countryCodes) ? $countryCodes[strtoupper($this->weather->country)] : "";
     }
 }
 ?>
