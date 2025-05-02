@@ -1,7 +1,11 @@
 <?php
-namespace App\Classes;
-class Weather{
 
+declare(strict_types=1);
+
+namespace App\Classes;
+
+class Weather
+{
     public function __construct(
         public string $code = '',
         public string $country = '',

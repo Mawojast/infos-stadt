@@ -1,14 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Classes\WeatherManager;
 use App\Traits\DirectoryHelper;
-use Cache;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Exception;
-use OpenAI\Laravel\Facades\OpenAI;
 use App\Models\City;
 use App\Classes\Article;
 use App\Classes\Weather;
@@ -16,26 +13,34 @@ use App\Classes\ArticleManager;
 use App\Classes\UrlApi;
 use App\Classes\OpenWeatherMap;
 
+use Illuminate\Http\Request;
+use OpenAI\Laravel\Facades\OpenAI;
+use Carbon\Carbon;
+use Cache;
+use Exception;
+
 class HomeController extends Controller
 {
     use DirectoryHelper;
+
     public $substitutedArticleImage = [];
 
-    public function home(){
-
+    public function home()
+    {
         $backgroundImagePaths = $this->getPublicFilePaths('images/home/');
         $backgroundImagePath = $this->getRandomFilePath($backgroundImagePaths);
         return view('home', compact('backgroundImagePath'));
     }
 
-    public function search(Request $request){
-
-        if(!isset($request->stadt)){
+    public function search(Request $request)
+    {
+        if (!isset($request->stadt)) {
             abort(404);
         }
+
         $weather = $this->getWeather($request->stadt);
 
-        if(!empty($weather->code)){
+        if (!empty($weather->code)) {
 
             $cityDescription = $this->getCityDiscription($weather);
 
@@ -48,25 +53,29 @@ class HomeController extends Controller
             $weatherBackgroundImagePath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/background/');
             $countryName = $weatherManager->getCountryNameByCode(app_path('Data/country_codes.json'));
 
-            if(Cache::has($request->getRequestUri())){
+            if (Cache::has($request->getRequestUri())) {
                 $articles = Cache::get($request->getRequestUri());
-            }else{
+            } else {
                 $articles = $this->getNews($weather->city);
                 Cache::put($request->getRequestUri(), $articles, 60);
             }
+
             return view('city', compact('weather', 'weatherIconPath','weatherBackgroundImagePath', 'articles', 'is_day', 'dateTime', 'cityDescription', 'articles', 'titleIcons', 'countryName'));
-        }else{
+
+        } else {
+
             return view('city_not_found');
+
         }
 
     }
-    public function city(string $city, Request $request){
-
+    public function city(string $city, Request $request)
+    {
         $weather = $this->getWeather($city);
-        if( !empty($weather->code)){
+
+        if (!empty($weather->code)) {
+
             $cityDescription = $this->getCityDiscription($weather);
-
-
             $weatherManager = new WeatherManager($weather);
 
             $dateTime = $weatherManager->getTime();
@@ -76,47 +85,51 @@ class HomeController extends Controller
             $weatherBackgroundImagePath = $weatherManager->getWeatherImagePath(app_path('Data/weather_codes.json'), 'images/background/');
             $countryName = $weatherManager->getCountryNameByCode(app_path('Data/country_codes.json'));
 
-            if(Cache::has($request->getRequestUri())){
+            if (Cache::has($request->getRequestUri())) {
                 $articles = Cache::get($request->getRequestUri());
-            }else{
+            } else {
                 $articles = $this->getNews($weather->city);
                 Cache::put($request->getRequestUri(), $articles, 60);
             }
 
             return view('city', compact('weather', 'weatherIconPath','weatherBackgroundImagePath', 'articles', 'is_day', 'dateTime', 'cityDescription', 'articles', 'titleIcons', 'countryName'));
-        }else{
+
+        } else {
+
             return view('city_not_found');
+
         }
     }
 
-    public function list(){
-
+    public function list()
+    {
         $cities = City::select('name')->orderBy('name')->get();
 
         return view('list', compact('cities'));
     }
 
-    public function listByLetter(Request $request){
-
+    public function listByLetter(Request $request)
+    {
         $letter = $request->buchstabe;
         $cities = City::where('name', 'like', $letter.'%')->get();
 
         return view('list_letter', compact('cities', 'letter'));
     }
 
-    public function privacyPolicy(){
-
+    public function privacyPolicy()
+    {
         return view('privacy_policy');
     }
 
-    public function imprint(){
-
+    public function imprint()
+    {
         return view('imprint');
     }
 
-    public function getWeather(string $city): Weather{
+    public function getWeather(string $city): Weather
+    {
+        try {
 
-        try{
             $OpenWeatherMapApi = new OpenWeatherMap();
 
             $OpenWeatherMapApi->setKey(env('OPENWEATHERMAP_API_KEY'));
@@ -126,7 +139,7 @@ class HomeController extends Controller
             $OpenWeatherMapApi->request();
             $apiResult = $OpenWeatherMapApi->getResult();
 
-            if($apiResult['cod'] === 200){
+            if ($apiResult['cod'] === 200) {
                 $Weather = new Weather(
                     $apiResult['weather'][0]['id'],
                     $apiResult['sys']['country'],
@@ -137,21 +150,22 @@ class HomeController extends Controller
                     $apiResult['main']['temp'],
                     $apiResult['wind']['speed'],
                     $apiResult['timezone']);
-                    var_dump($Weather);
                 return $Weather;
             }
 
-        }catch(Exception $e){
+        } catch(Exception $e) {
+
             error_log("Weather API error - ".$e->getMessage(), 0);
             return new Weather();
+
         }
 
         return new Weather();
     }
 
-    public function getNews(string $city): array{
-
-        try{
+    public function getNews(string $city): array
+    {
+        try {
 
             $NewsApi = new UrlApi(env('NEWS_API_HOST'));
 
@@ -160,12 +174,12 @@ class HomeController extends Controller
             //$NewsApi->addParam('category','general');
             $NewsApi->addParam('language', 'de');
             $NewsApi->addParam('sortBy', 'publishedAt');
-            $NewsApi->addParam('pageSize', 12);
+            $NewsApi->addParam('pageSize', '12');
             $NewsApi->request();
             $result = $NewsApi->getResult();
 
             $ArticleManager = New ArticleManager();
-            foreach($result['articles'] as $article){
+            foreach ($result['articles'] as $article) {
                 $ArticleManager->addArticle(new Article(
                     $article['title'],
                     $article['description'],
@@ -177,18 +191,19 @@ class HomeController extends Controller
             $ArticleManager->removeDoubleArticles();
             $ArticleManager->setEmptyArticleImages();
 
-
             return $ArticleManager->articles;
 
-        }catch(Exception $e){
+        } catch (Exception $e) {
+
             error_log("Article API error - ".$e->getMessage(),0);
             return [];
+
         }
     }
 
-    public function getMediaStack(string $city): array{
-
-        try{
+    public function getMediaStack(string $city): array
+    {
+        try {
 
             $MediaStackApi = new UrlApi(env('MEDIASTACK_API_HOST'));
 
@@ -196,13 +211,13 @@ class HomeController extends Controller
             $MediaStackApi->addParam('keywords', $city);
             $MediaStackApi->addParam('sort', 'published_desc');
             $MediaStackApi->addParam('languages', 'de');
-            $MediaStackApi->addParam('limit', 20);
+            $MediaStackApi->addParam('limit', '20');
             $MediaStackApi->request();
 
             $result = $MediaStackApi->getResult();
             $ArticleManager = New ArticleManager();
 
-            foreach($result['data'] as $article){
+            foreach ($result['data'] as $article) {
                 $ArticleManager->addArticle(new Article(
                     $article['title'],
                     $article['description'],
@@ -215,23 +230,27 @@ class HomeController extends Controller
 
             $ArticleManager->removeDoubleArticles();
             $ArticleManager->setEmptyArticleImages();
+
             return $ArticleManager->articles;
 
-        }catch(Exception $e){
+        } catch (Exception $e) {
+
             error_log("Article API error - ".$e->getMessage(), 0);
             return [];
+
         }
     }
 
-    public function getCityDiscription(Weather $weather): string{
-
+    public function getCityDiscription(Weather $weather): string
+    {
         $cityDescription = '';
 
-        try{
+        try {
+
             $city = City::where('name', $weather->city)->where('latitude', $weather->lat)->where('longitude', $weather->lon)->get();
 
-            if($city->isEmpty()){
-                $cityDescription = $this->generateCityDescription($weather->city, $weather->lat, $weather->lon);
+            if ($city->isEmpty()) {
+                $cityDescription = $this->generateCityDescription($weather->city, (float) $weather->lat, (float) $weather->lon);
                 City::insert([
                     'name' => $weather->city,
                     'longitude' => $weather->lon,
@@ -241,17 +260,22 @@ class HomeController extends Controller
                     'timezone' => $weather->timezone,
                     'created_at' => Carbon::now(),
                 ]);
-            }else{
+            } else {
                 $cityDescription = $city[0]->description;
             }
-        }catch(Exception $e){
+
+        } catch(Exception $e) {
+
             error_log('Database error - '.$e->getMessage(), 0);
+
         }
 
         return $cityDescription;
     }
-    public function generateCityDescription(string $name, float $lat, float $lon): string{
-        try{
+    public function generateCityDescription(string $name, float $lat, float $lon): string
+    {
+        try {
+
             $random = rand(1, 2);
             $promptName = 'PROMPT_'.$random;
             $prompt = str_replace(['\'.$name.\'', '\'.$lat.\'', '\'.$lon.\''], [$name, $lat, $lon], env($promptName));
@@ -263,9 +287,12 @@ class HomeController extends Controller
             ]);
 
             return $result['choices'][0]['text'];
-        }catch(Exception $e){
+
+        } catch(Exception $e) {
+
             error_log("City description error - ".$e->getMessage(),0);
             return '';
+
         }
     }
 }

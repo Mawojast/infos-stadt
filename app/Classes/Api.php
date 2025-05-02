@@ -1,7 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Classes;
-interface Api {
+interface Api
+{
     public function addParam(string $key, string $value): void;
     public function request(): void;
 }
-?>
+
